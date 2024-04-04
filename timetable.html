@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Timetable PDF</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  th {
+    background-color: #f2f2f2;
+  }
+  tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  .button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    margin: 20px 0;
+    border: none;
+    cursor: pointer;
+  }
+  .button:hover {
+    background-color: #45a049;
+  }
+</style>
+</head>
+<body>
+
+<h2>University Timetable</h2>
+
+<table id="timetable">
+  <tr>
+    <th>Course</th>
+    <th>Time</th>
+    <th>Location</th>
+  </tr>
+  <tr>
+    <td colspan="3"><strong>Monday</strong></td>
+    </tr>
+    <tr>
+        <td>CPE310</td>
+        <td>4-5pm</td>
+        <td>ETF/TETFUND</td>
+    </tr>
+    
+  <tr>
+    <td colspan="3"><strong>Tuesday</strong></td>
+  </tr>
+   <tr>
+    <td>CSC304</td>
+    <td>10-12pm</td>
+    <td>Seminar room A</td>
+  </tr>
+  <tr>
+    <td>CSC302</td>
+    <td>11-12pm</td>
+    <td>ETF/TETFUND</td>
+  </tr>
+  <tr>
+    <td>CSC306</td>
+    <td>3-5pm</td>
+    <td>AUD II</td>
+  </tr>
+  <tr>
+    <td>ECN302</td>
+    <td>4-5pm </td>
+    <td>FBLT, ODLT 2, FBLT</td>
+  </tr>
+  
+
+  <tr>
+    <td colspan="3"><strong>Wednesday</strong></td>
+  </tr>
+   <tr>
+    <td>CSC312</td>
+    <td>8-10am</td>
+    <td>Seminar room A</td>
+  </tr>
+  <tr>
+    <td>ECN302</td>
+    <td>10-11am</td>
+    <td>FBLT, ODLT 2, FBLT</td>
+  </tr>
+  <tr>
+    <td>CSC308</td>
+    <td>11-1pm</td>
+    <td>ETF/TETFUND</td>
+  </tr>
+ 
+  <tr>
+    <td>ECN314</td>
+    <td>3-4pm</td>
+    <td>BOOA</td>
+  </tr>
+  <tr>
+    <td colspan="3"><strong>Thursday</strong></td>
+  </tr>
+  <tr>
+    <td>CSC302</td>
+    <td>11-12pm</td>
+    <td>ETF/TETFUND</td>
+  </tr>
+  <tr>
+    <td>CPE316</td>
+    <td>2-4pm</td>
+    <td>ETF/TETFUND</td>
+  </tr>
+  <tr>
+    <td colspan="3"><strong>Friday</strong></td>
+  </tr>
+  <tr>
+    <td>ECN302</td>
+    <td>11-12pm</td>
+    <td>FBLT, ODLT 2, FBLT</td>
+  </tr>
+  <tr>
+   
+</table>
+
+
+<button class="button" onclick="generatePDF()">Download as PDF</button>
+<button class="button" onclick="downloadImage()">Download as Image</button>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.debug.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.js"></script>
+<script>
+  function generatePDF() {
+    const element = document.getElementById('timetable');
+    html2canvas(element).then((canvas) => {
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF({
+        orientation: 'landscape',
+      });
+      const imgProps= pdf.getImageProperties(imgData);
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      pdf.save('timetable.pdf');
+    });
+  }
+
+  function downloadImage() {
+    const element = document.getElementById('timetable');
+    html2canvas(element).then((canvas) => {
+      const imgData = canvas.toDataURL('image/png').replace("image/png", "image/octet-stream");
+      const link = document.createElement('a');
+      link.setAttribute('download', 'timetable.png');
+      link.setAttribute('href', imgData);
+      link.click();
+    });
+  }
+</script>
+
+</body>
+</html>
